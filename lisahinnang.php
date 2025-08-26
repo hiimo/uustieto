@@ -42,7 +42,7 @@ if(isset($_GET['koht'])) {
     <div class="container">
         <h1>-Hinda kohta > <?php echo $row['nimi']; ?>-</h1>
         <hr>
-        <a href="/KThindakogemust/admin/"><--Tagasi</a>
+        <a href="/~hnarep/KThindakogemust/index.php"><--Tagasi</a>
         <br>
         <br>
         <form method="post">
@@ -104,7 +104,7 @@ if(isset($_GET['koht'])) {
 
         if ($result_hinnangud->num_rows > 0) {
             while($row = $result_hinnangud->fetch_assoc()) {
-                echo "<b>" . $row["nimi"] . " " . $row["hinnang"] . "/10" . "<a href='kustutahinnang.php?kommentaar=" . $row["kommentaar"] . "'> X </a>" . "</b><br>" . $row["kommentaar"] . "<br><br> ";
+                echo "<b>" . $row["nimi"] . " " . $row["hinnang"] . "/10" . "<a href='kustutahinnang.php?id=" . $row["id"] . "'> X </a>" . "</b><br>" . $row["kommentaar"] . "<br><br> ";
             }
         } else {
             echo "Hinnanguid ei leitud.";
