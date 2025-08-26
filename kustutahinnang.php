@@ -1,22 +1,30 @@
 <?php
-
-session_start();
 include ("config.php");
+session_start();
 
 if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
     header("Location: login.php");
     exit;
 }
 
-if(isset($_GET['kommentaar'])) {
-    $valitudKommentaar = $_GET['kommentaar'];
-    $valitudId = $_SESSION['id'];
+session_start();
+include ("config.php");
 
-    $sqlKustutaHinnang = "DELETE FROM hinnangud WHERE kommentaar = '$valitudKommentaar'";
-    if ($uhendus->query($sqlKustutaHinnang) === TRUE) {
-        header("Location: lisahinnang.php?koht=$valitudId");
+if(isset($_GET['koht'])) {
+    $valitudKohtId = $_GET['koht'];
+    $sqlValitud_koht = "SELECT nimi FROM kohad WHERE id = '$valitudKohtId'";
+    $valitud_koht = $uhendus->query($sqlValitud_koht);
+    $row = mysqli_fetch_assoc($valitud_koht);
+
+    $sqlKustutaAsutus = "DELETE FROM kohad WHERE id = '$valitudKohtId'";
+    if ($uhendus->query($sqlKustutaAsutus) === TRUE) {
+        header("Location: index.php");
         exit;
+    } else {
+        echo "Viga hinnangu kustutamisel: " . $uhendus->error;
     }
+} else {
+    header("Location: index.php");
 }
 
 $uhendus->close();
