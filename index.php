@@ -53,8 +53,8 @@ session_start();
 
                 if ($result->num_rows > 0){
                     while ($row = $result->fetch_assoc()){
-                        $koht = $row['nimi'];
                         $id = $row['id'];
+
                         $hinnanuteArvQuery = "SELECT COUNT(*) as hinnanute_arv FROM hinnangud WHERE id_koht = '$id'";
                         $hinnanuteResult = $uhendus->query($hinnanuteArvQuery);
                         $hinnanuteArv = $hinnanuteResult->fetch_assoc()['hinnanute_arv'];
@@ -62,15 +62,21 @@ session_start();
                         $keskmineHinneQuery = "SELECT AVG(hinnang) as keskmine_hinne FROM hinnangud WHERE id_koht = '$id'";
                         $keskmineHinneResult = $uhendus->query($keskmineHinneQuery);
                         $keskmineHinne = $keskmineHinneResult->fetch_assoc()['keskmine_hinne'];
-                        $YkeskmineHinne = round($keskmineHinne,1);
 
+                        $YkeskmineHinne = round($keskmineHinne, 1);
                         $lisamiseParing = "UPDATE kohad SET keskmine_hinne = '$YkeskmineHinne', hinnanute_arv = '$hinnanuteArv' WHERE id = '$id'";
-                        $lisamiseTulemus = $uhendus->query($lisamiseParing);
+                        $uhendus->query($lisamiseParing);
                         ?>
                         <tr>
                             <td><a href="lisahinnang.php?koht=<?php echo urlencode($id); ?>"><?php echo $row["nimi"]; ?></a></td>
                             <td><?php echo $row["asukoht"]; ?></td>
-                            <td><?php echo round($keskmineHinne, 1);?></td>
+                            <td>
+                                <?php 
+                                echo ($keskmineHinne == floor($keskmineHinne)) 
+                                    ? (int)$keskmineHinne 
+                                    : number_format($keskmineHinne, 1, ',', ''); 
+                                ?>
+                            </td>
                             <td><?php echo $hinnanuteArv; ?></td>
                         </tr>
                         <?php
@@ -79,7 +85,6 @@ session_start();
                 ?>
             </tbody>
         </table>
-
 
 
 
